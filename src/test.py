@@ -117,6 +117,7 @@ class Test(object):
                     try:
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
+                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
@@ -172,6 +173,7 @@ class Test(object):
                         try:
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
+                            self.net = torch.jit.freeze(self.net)
                         except (RuntimeError, TypeError) as e:
                             print("---- JIT trace disable.")
                             print("failed to use PyTorch jit mode due to: ", e)
@@ -217,6 +219,7 @@ class Test(object):
                         try:
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
+                            self.net = torch.jit.freeze(self.net)
                         except (RuntimeError, TypeError) as e:
                             print("---- JIT trace disable.")
                             print("failed to use PyTorch jit mode due to: ", e)
@@ -250,6 +253,7 @@ class Test(object):
                     try:
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
+                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
@@ -284,6 +288,7 @@ class Test(object):
                     try:
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
+                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
