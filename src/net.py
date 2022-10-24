@@ -188,6 +188,6 @@ class F3Net(nn.Module):
 
     def initialize(self):
         if self.cfg.snapshot:
-            self.load_state_dict(torch.load(self.cfg.snapshot))
+            self.load_state_dict(torch.load(self.cfg.snapshot, map_location=torch.device('cpu')))
         else:
             weight_init(self)
