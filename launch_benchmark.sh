@@ -9,6 +9,7 @@ function main {
     set_environment
 
     # requirements
+    cd src
 
     # if multiple use 'xxx,xxx,xxx'
     model_name_list=($(echo "${model_name}" |sed 's/,/ /g'))
