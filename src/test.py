@@ -108,13 +108,14 @@ class Test(object):
                 if i >= args.num_iter:
                     break
 
-                image = image.to(args.device).float()
+                image = image.float()
                 mask = mask.to(args.device)
-                shape = [i.to(args.device) for i in shape]
                 if args.channels_last:
                     image = image.to(memory_format=torch.channels_last) if len(image.shape) == 4 else image
                 if args.jit and i == 0:
                     try:
+                        image = image.to(args.device)
+                        shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
                         self.net = torch.jit.freeze(self.net)
@@ -123,6 +124,8 @@ class Test(object):
                         print("failed to use PyTorch jit mode due to: ", e)
                 with torch.autograd.profiler_legacy.profile(enabled=args.profile, use_xpu=True, record_shapes=False) as prof:
                     elapsed = time.time()
+                    image = image.to(args.device)
+                    shape = [i.to(args.device) for i in shape]
                     out1u, out2u, out2r, out3r, out4r, out5r = self.net(image, shape)
                     torch.xpu.synchronize()
                     elapsed = time.time() - elapsed
@@ -164,13 +167,14 @@ class Test(object):
                     if i >= args.num_iter:
                         break
 
-                    image = image.to(args.device).float()
+                    image = image.float()
                     mask = mask.to(args.device)
-                    shape = [i.to(args.device) for i in shape]
                     if args.channels_last:
                         image = image.to(memory_format=torch.channels_last) if len(image.shape) == 4 else image
                     if args.jit and i == 0:
                         try:
+                            image = image.to(args.device)
+                            shape = [i.to(args.device) for i in shape]
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
                             self.net = torch.jit.freeze(self.net)
@@ -179,6 +183,8 @@ class Test(object):
                             print("failed to use PyTorch jit mode due to: ", e)
                         
                     elapsed = time.time()
+                    image = image.to(args.device)
+                    shape = [i.to(args.device) for i in shape]
                     with torch.jit.fuser(fuser_mode):
                         out1u, out2u, out2r, out3r, out4r, out5r = self.net(image, shape)
                     torch.cuda.synchronize()
@@ -210,13 +216,14 @@ class Test(object):
                     if i >= args.num_iter:
                         break
 
-                    image = image.to(args.device).float()
+                    image = image.float()
                     mask = mask.to(args.device)
-                    shape = [i.to(args.device) for i in shape]
                     if args.channels_last:
                         image = image.to(memory_format=torch.channels_last) if len(image.shape) == 4 else image
                     if args.jit and i == 0:
                         try:
+                            image = image.to(args.device)
+                            shape = [i.to(args.device) for i in shape]
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
                             self.net = torch.jit.freeze(self.net)
@@ -225,6 +232,8 @@ class Test(object):
                             print("failed to use PyTorch jit mode due to: ", e)
                         
                     elapsed = time.time()
+                    image = image.to(args.device)
+                    shape = [i.to(args.device) for i in shape]
                     out1u, out2u, out2r, out3r, out4r, out5r = self.net(image, shape)
                     elapsed = time.time() - elapsed
                     p.step()
@@ -244,13 +253,14 @@ class Test(object):
                 if i >= args.num_iter:
                     break
 
-                image = image.to(args.device).float()
+                image = image.float()
                 mask = mask.to(args.device)
-                shape = [i.to(args.device) for i in shape]
                 if args.channels_last:
                     image = image.to(memory_format=torch.channels_last) if len(image.shape) == 4 else image
                 if args.jit and i == 0:
                     try:
+                        image = image.to(args.device)
+                        shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
                         self.net = torch.jit.freeze(self.net)
@@ -259,6 +269,8 @@ class Test(object):
                         print("failed to use PyTorch jit mode due to: ", e)
                     
                 elapsed = time.time()
+                image = image.to(args.device)
+                shape = [i.to(args.device) for i in shape]
                 with torch.jit.fuser(fuser_mode):
                     out1u, out2u, out2r, out3r, out4r, out5r = self.net(image, shape)
                 torch.cuda.synchronize()
@@ -279,13 +291,14 @@ class Test(object):
                 if i >= args.num_iter:
                     break
 
-                image = image.to(args.device).float()
+                image = image.float()
                 mask = mask.to(args.device)
-                shape = [i.to(args.device) for i in shape]
                 if args.channels_last:
                     image = image.to(memory_format=torch.channels_last) if len(image.shape) == 4 else image
                 if args.jit and i == 0:
                     try:
+                        image = image.to(args.device)
+                        shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
                         self.net = torch.jit.freeze(self.net)
@@ -294,6 +307,8 @@ class Test(object):
                         print("failed to use PyTorch jit mode due to: ", e)
                     
                 elapsed = time.time()
+                image = image.to(args.device)
+                shape = [i.to(args.device) for i in shape]
                 out1u, out2u, out2r, out3r, out4r, out5r = self.net(image, shape)
                 if args.device == "xpu":
                     torch.xpu.synchronize()
@@ -326,6 +341,10 @@ if __name__=='__main__':
 
     t = Test(args, dataset, F3Net, args.dataset)
     with torch.no_grad():
+        model.eval()
+        if args.device == "xpu":
+            datatype = torch.float16 if args.precision == "float16" else torch.bfloat16 if args.precision == "bfloat16" else torch.float
+            model = torch.xpu.optimize(model=model, dtype=datatype)
         if args.precision == "float16" and args.device == "cuda":
             print("---- Use autocast fp16 cuda")
             with torch.cuda.amp.autocast(enabled=True, dtype=torch.float16):
