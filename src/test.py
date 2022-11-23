@@ -66,6 +66,10 @@ class Test(object):
         self.net = Network(self.cfg)
         self.net.train(False)
         self.net.to(args.device)
+        self.net.eval()
+        if args.device == "xpu":
+            datatype = torch.float16 if args.precision == "float16" else torch.bfloat16 if args.precision == "bfloat16" else torch.float
+            self.net = torch.xpu.optimize(model=self.net, dtype=datatype)
 
     def show(self):
         with torch.no_grad():
@@ -118,7 +122,6 @@ class Test(object):
                         shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
-                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
@@ -177,7 +180,6 @@ class Test(object):
                             shape = [i.to(args.device) for i in shape]
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
-                            self.net = torch.jit.freeze(self.net)
                         except (RuntimeError, TypeError) as e:
                             print("---- JIT trace disable.")
                             print("failed to use PyTorch jit mode due to: ", e)
@@ -226,7 +228,6 @@ class Test(object):
                             shape = [i.to(args.device) for i in shape]
                             self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                             print("---- JIT trace enable.")
-                            self.net = torch.jit.freeze(self.net)
                         except (RuntimeError, TypeError) as e:
                             print("---- JIT trace disable.")
                             print("failed to use PyTorch jit mode due to: ", e)
@@ -263,7 +264,6 @@ class Test(object):
                         shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
-                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
@@ -301,7 +301,6 @@ class Test(object):
                         shape = [i.to(args.device) for i in shape]
                         self.net = torch.jit.trace(self.net, (image,shape), check_trace=False, strict=False)
                         print("---- JIT trace enable.")
-                        self.net = torch.jit.freeze(self.net)
                     except (RuntimeError, TypeError) as e:
                         print("---- JIT trace disable.")
                         print("failed to use PyTorch jit mode due to: ", e)
@@ -341,10 +340,6 @@ if __name__=='__main__':
 
     t = Test(args, dataset, F3Net, args.dataset)
     with torch.no_grad():
-        model.eval()
-        if args.device == "xpu":
-            datatype = torch.float16 if args.precision == "float16" else torch.bfloat16 if args.precision == "bfloat16" else torch.float
-            model = torch.xpu.optimize(model=model, dtype=datatype)
         if args.precision == "float16" and args.device == "cuda":
             print("---- Use autocast fp16 cuda")
             with torch.cuda.amp.autocast(enabled=True, dtype=torch.float16):
