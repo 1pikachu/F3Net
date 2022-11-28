@@ -9,6 +9,7 @@ function main {
     set_environment
 
     # requirements
+    pip install tensorboardX
     cd src
 
     # if multiple use 'xxx,xxx,xxx'
