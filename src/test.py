@@ -280,10 +280,10 @@ class Test(object):
                 elapsed = time.time() - elapsed
                 out   = out2u
                 pred  = (torch.sigmoid(out[0,0])*255).cpu().float().numpy()
-                head  = '../eval/maps/F3Net/'+ self.cfg.datapath.split('/')[-1]
-                if not os.path.exists(head):
-                    os.makedirs(head)
-                cv2.imwrite(head+'/'+name[0]+'.png', np.round(pred))
+                #head  = '../eval/maps/F3Net/'+ self.cfg.datapath.split('/')[-1]
+                #if not os.path.exists(head):
+                #    os.makedirs(head)
+                #cv2.imwrite(head+'/'+name[0]+'.png', np.round(pred))
 
                 print("Iteration: {}, inference time: {} sec.".format(i, elapsed), flush=True)
                 if i >= args.num_warmup:
@@ -317,10 +317,10 @@ class Test(object):
                 elapsed = time.time() - elapsed
                 out   = out2u
                 pred  = (torch.sigmoid(out[0,0])*255).cpu().float().numpy()
-                head  = '../eval/maps/F3Net/'+ self.cfg.datapath.split('/')[-1]
-                if not os.path.exists(head):
-                    os.makedirs(head)
-                cv2.imwrite(head+'/'+name[0]+'.png', np.round(pred))
+                #head  = '../eval/maps/F3Net/'+ self.cfg.datapath.split('/')[-1]
+                #if not os.path.exists(head):
+                #    os.makedirs(head)
+                #cv2.imwrite(head+'/'+name[0]+'.png', np.round(pred))
 
                 print("Iteration: {}, inference time: {} sec.".format(i, elapsed), flush=True)
                 if i >= args.num_warmup:
