@@ -36,6 +36,8 @@ def parse_args():
     parser.add_argument('--nv_fuser', action='store_true', default=False, help='enable nv fuser')
     parser.add_argument('--dataset', default="/home2/pytorch-broad-models/F3Net", type=str)
     parser.add_argument('--ckpt', default="/home2/pytorch-broad-models/F3Net/model-32", type=str)
+    parser.add_argument('--compile', action='store_true', default=False, help='compile model')
+    parser.add_argument('--backend', default="inductor", type=str, help='backend')
     args = parser.parse_args()
     print(args)
     return args
@@ -102,6 +104,9 @@ class Test(object):
         else:
            fuser_mode = "none"
         print("---- fuser mode:", fuser_mode)
+        if args.compile:
+            print("----enable compiler")
+            self.net = torch.compile(self.net, backend=args.backend, options={"freezing": True})
 
         total_time = 0.0
         total_sample = 0
