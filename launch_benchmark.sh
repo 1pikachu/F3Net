@@ -9,7 +9,7 @@ function main {
     set_environment
 
     # requirements
-    pip install tensorboardX
+    pip install tensorboardX opencv-python==4.8.0.74
     cd src
 
     # if multiple use 'xxx,xxx,xxx'
