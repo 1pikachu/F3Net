@@ -54,14 +54,13 @@ function generate_core {
             OOB_EXEC_HEADER+=" -C $(echo ${device_array[i]} |awk -F ';' '{print $1}') "
         elif [ "${device}" == "cuda" ];then
             OOB_EXEC_HEADER=" CUDA_VISIBLE_DEVICES=${device_array[i]} "
-	        addtion_options+=" --nv_fuser "
         elif [ "${device}" == "xpu" ];then
             OOB_EXEC_HEADER=" ZE_AFFINITY_MASK=${i} "
         fi
         if [[ "${addtion_options}" =~ "--compile" ]];then
             echo "run with compile"
-        else
-            addtion_options+=" --jit "
+        elif [[ "${addtion_options}" =~ "--jit" ]];then
+            echo "run with jit"
         fi
         printf " ${OOB_EXEC_HEADER} \
 	        python test.py --batch_size ${batch_size} \
