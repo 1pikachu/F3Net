@@ -38,6 +38,7 @@ def parse_args():
     parser.add_argument('--ckpt', default="/home2/pytorch-broad-models/F3Net/model-32", type=str)
     parser.add_argument('--compile', action='store_true', default=False, help='compile model')
     parser.add_argument('--backend', default="inductor", type=str, help='backend')
+    parser.add_argument('--ipex', action='store_true', default=False)
     args = parser.parse_args()
     print(args)
     return args
@@ -69,7 +70,7 @@ class Test(object):
         self.net.train(False)
         self.net.to(args.device)
         self.net.eval()
-        if args.device == "xpu":
+        if args.device == "xpu" and args.ipex:
             datatype = torch.float16 if args.precision == "float16" else torch.bfloat16 if args.precision == "bfloat16" else torch.float
             self.net = torch.xpu.optimize(model=self.net, dtype=datatype)
 
@@ -341,8 +342,9 @@ class Test(object):
 if __name__=='__main__':
     args = parse_args()
 
-    if args.device == "xpu":
+    if args.device == "xpu" and args.ipex:
         import intel_extension_for_pytorch
+        print("Use IPEX")
     elif args.device == "cuda":
         torch.backends.cuda.matmul.allow_tf32 = False
 
